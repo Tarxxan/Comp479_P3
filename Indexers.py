@@ -17,8 +17,23 @@ class Indexers:
         tdF = {}
         for key in data:
             tdF[key] = []
-            # https://stackoverflow.com/questions/2161752/how-to-count-the-frequency-of-the-elements-in-an-unordered-list
-            # only works because the numbers are already sorted
+            """
+            https://stackoverflow.com/questions/2161752/how-to-count-the-frequency-of-the-elements-in-an-unordered-list
+            only works because the numbers are already sorted. Functional approach quicker and cleaner than this long
+            loop with many if checks. The functional approach uses sorted which is optimized comapred to raw loops.
+            This got me to start looking at the sorted function for lists which ended up being used often in my code
+            
+            count = 1
+            for i in range(len(data[key]) - 1):
+                if i == data[key][i + 1]:
+                    count += 1
+                else:
+                    if count >1:
+                        print(count)
+                    tdF[key].append(int(count))
+                    count = 1
+            """
+
             tdF[key].extend([len(list(group)) for key, group in groupby(data[key])])
         return tdF
 
@@ -82,4 +97,3 @@ class Indexers:
 
     def timed_indexer(self):
         pass
-

@@ -69,4 +69,7 @@ class BM25:
                 else:
                     self.document_rsv[document] += rsvd
             count += 1
+        """
+        creates a list of tuples dictionary key as first and then score as second element.
+        The sorted function then sorts based off the score of each tuple and orders in descending order"""
         self.document_rsv = sorted(self.document_rsv.items(), key=lambda lst: lst[1], reverse=True)

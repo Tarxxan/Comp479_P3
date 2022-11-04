@@ -21,15 +21,24 @@ class Query:
 
     def union(self):
         or_list = []
+        or_dict = {}
+        result = []
         for i in range(len(self.result)):
             or_list.extend(self.result[i])
-        # https://stackoverflow.com/questions/23429426/sorting-a-list-by-frequency-of-occurrence-in-a-list
-        sorted_dup = sorted(or_list, key=Counter(or_list).get, reverse=True)
-        result = []
-        for num in sorted_dup:
-            if num not in result:
-                result.append(num)
-        self.result_or=result
+
+        for i in or_list:
+            if i in or_dict:
+                or_dict[i] += 1
+            else:
+                or_dict[i] = 1
+
+        or_list = sorted(or_dict.items(), key=lambda lst: lst[1], reverse=True)
+
+        for i in or_list:
+            result.append(i[0])
+
+        self.result_or = result
+
 
     def query_operation(self, query, operation):
         list_of_dictionary = []
