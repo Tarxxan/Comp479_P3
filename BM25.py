@@ -62,7 +62,7 @@ class BM25:
                 numerator = (self.k1 + 1) * tftd[document]
                 ld = self.indexer.document_lengths[document - 1]
                 l_avg = self.indexer.total_doc_length / len(self.indexer.document_lengths)
-                denominator = (self.k1 * ((1 - self.b) + self.b * (ld / l_avg) + tftd[document]))
+                denominator = (self.k1 * ((1 - self.b) + self.b * (ld / l_avg)) + tftd[document])
                 rsvd = self.words_idf[count] * (numerator / denominator)
                 if self.document_rsv[document] == 0:
                     self.document_rsv[document] = rsvd

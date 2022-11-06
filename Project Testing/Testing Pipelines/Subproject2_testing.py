@@ -10,6 +10,7 @@ BM25 = BM25(indexer)
 BM25.calculation(query)
 
 print("Document ranked by BM25 in descending order")
+# print(BM25.document_rsv)
 with open(query + ' ranked.txt', 'w') as f:
     f.write(str(BM25.document_rsv))
 

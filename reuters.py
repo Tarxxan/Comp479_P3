@@ -5,6 +5,7 @@ from copy import deepcopy
 
 from nltk.stem import PorterStemmer
 from nltk.tokenize import word_tokenize, regexp_tokenize
+import time
 
 tokenized_title = []
 tokenized_body = []
@@ -82,36 +83,35 @@ def print_reuters(filename, lists):
             count += 1
 
 
-#Changed the tokenize text to work for only 10000 pairs
+# Changed the tokenize text to work for only 10000 pairs
 def tokenize_text(raw_list):
     count = 0
     tokenized_reuters = []
     remove = ["lt", ",", ".", ">", "<", "-", ";", ":", "&", "#", "?", "!"]
     for reuters in raw_list:
-        for r in reuters:
-            for lists in r:
-                (id, title, body) = lists
-                if title:
-                    words = word_tokenize(title[0])
-                    for word in words:
-                        if word not in remove:
-                            tokenized_reuters.append((id, word))
-                            count += 1
-                            if count == 10000:
-                                return tokenized_reuters
-                else:
-                    pass
-                if body:
-                    words = word_tokenize(body[0])
-                    for word in words:
-                        if word not in remove:
-                            tokenized_reuters.append((id, word))
-                            count += 1
-                            if count == 10000:
-                                return tokenized_reuters
-                else:
-                    pass
-        return tokenized_reuters
+        for lists in reuters:
+            (id, title, body) = lists
+            if title:
+                words = word_tokenize(title[0])
+                for word in words:
+                    if word not in remove:
+                        tokenized_reuters.append((id, word))
+                        count += 1
+                        if count == 10000:
+                            return tokenized_reuters
+            else:
+                pass
+            if body:
+                words = word_tokenize(body[0])
+                for word in words:
+                    if word not in remove:
+                        tokenized_reuters.append((id, word))
+                        count += 1
+                        if count == 10000:
+                            return tokenized_reuters
+            else:
+                pass
+    return tokenized_reuters
 
 
 # parses the raw text of the file (title and body) using regex. This will happen for every article in the file
@@ -131,7 +131,7 @@ def raw_text(files):
         title.append(regexp_tokenize(everything, '<TITLE>([\s\S]+?)<\/TITLE>'))
         body.append(regexp_tokenize(everything, '<BODY>([\s\S]+?)<\/BODY>'))
     raw_list.append(merge3(newIDs, title, body))
-# print_reuters("raw", raw_list)
+    # print_reuters("raw", raw_list)
     return raw_list
 
 
@@ -174,8 +174,10 @@ def remove_words(stem, remove):
         files.clear()
     print_reuters("removed", removed_list)
 
+
 def setup(files):
-    rt=[]
+    rt = []
     for file in files:
-        rt.append(raw_text(file))
-    return tokenize_text(rt)
+        rt = raw_text(file)
+        start_time = time.time()
+        return tokenize_text(rt), start_time

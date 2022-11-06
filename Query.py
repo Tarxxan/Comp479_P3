@@ -14,7 +14,7 @@ class Query:
     def intersect(self):
         if self.result:
             final_intersection = self.result[0]
-            for i in self.result[0:]:
+            for i in self.result[1:]:
                 new_list = set(final_intersection).intersection(i)
                 final_intersection = new_list
             self.result_and = sorted(final_intersection)

@@ -55,8 +55,7 @@ def indexer():
     f = []
     noDupes, postings = {}, {}
     fileList = get_files()
-    start_time = time.time()
-    f = setup(fileList)
+    f,start_time = setup(fileList)
     remove_dup(f, noDupes)
     postings_list(noDupes, postings)
     return start_time, postings
