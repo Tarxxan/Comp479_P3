@@ -36,12 +36,6 @@ class Indexers:
             tdF[key].extend([len(list(group)) for key, group in groupby(data[key])])
         return tdF
 
-    def remove_posting_dup(self, data):
-        for key in data:
-            list_set = list(set(data[key]))
-            data[key] = list_set
-        return data
-
     def create_indexer(self, rt, naive_dict):
         total_doc_length = 0
         document_lengths = []
@@ -59,9 +53,6 @@ class Indexers:
                                 naive_dict[word] = [id]
                             else:
                                 naive_dict[word].append(id)
-                else:
-                    pass
-
                 if body:
                     words = word_tokenize(body[0])
                     document_length += len(words)
@@ -71,8 +62,6 @@ class Indexers:
                                 naive_dict[word] = [id]
                             else:
                                 naive_dict[word].append(id)
-                else:
-                    pass
                 document_lengths.append(document_length)
                 total_doc_length += document_length
                 document_length = 0
@@ -98,7 +87,7 @@ class Indexers:
         spimi = {}
         for articles in token_list:
             for words in articles[1:]:
-                if words in spimi:
+                if words in spimi and spimi[words][-1] != articles[0]:
                     spimi[words].append(articles[0])
                 else:
                     spimi[words] = [articles[0]]
@@ -113,8 +102,6 @@ class Indexers:
 
     def timed_indexer_spimi(self):
         timed_spimi = {}
-        count = 0
-        new = {}
         fileList = get_files()
         for file in fileList:
             rt = raw_text(file)
@@ -125,11 +112,9 @@ class Indexers:
         return timed_spimi, start_time
 
     def timed_indexer_p2(self):
-        count = 0
         f = []
         fileList = get_files()
         for file in fileList:
-            new = f
             rt = raw_text(file)
             tokens = self.create_10k_tokens(rt)
             start_time = time.perf_counter()
@@ -138,6 +123,11 @@ class Indexers:
         postings = self.postings_list(no_dupes)
         return postings, start_time
 
+    def remove_posting_dup(self, data):
+        for key in data:
+            list_set = list(set(data[key]))
+            data[key] = list_set
+        return data
     def remove_dup(self, f):
         dict = {}
         for tups in f:

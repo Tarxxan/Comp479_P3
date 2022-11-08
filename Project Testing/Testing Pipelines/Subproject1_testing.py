@@ -1,8 +1,6 @@
 import json
 import time
 
-import Indexer_P2
-from Indexer_P2 import *
 from Indexers import *
 
 # Time to create the indexer with 10000 doc pairs
